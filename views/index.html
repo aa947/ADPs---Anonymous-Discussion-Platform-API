@@ -1,97 +1,195 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Welcome to HyperDev!</title>
-    <meta name="description" content="A cool thing made with HyperDev">
-    <link id="favicon" rel="icon" href="https://hyperdev.com/favicon-app.ico" type="image/x-icon">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="./public/style.css">
-  </head>
-  <body>
-    <header>
-      <h1>
-        ISQA_3 - Anon Message Board
-      </h1>
-    </header>
-    <div id='userstories' style='margin-left: 5%; margin-top: 5%'>
-      <h3>User Stories</h3>
-      <ol>
-        <li>Only allow your site to be loading in an iFrame on your own pages.</li>
-        <li>Do not allow DNS prefetching.</li>
-        <li>Only allow your site to send the referrer for your own pages.</li>
-        <li>I can <b>POST</b> a thread to a specific message board by passing form data <code>text</code> and <code>delete_password</code> to <i>/api/threads/{board}</i>.(Recomend res.redirect to board page /b/{board})
-        Saved will be <code>_id</code>, <code>text</code>, <code>created_on</code>(date&amp;time), <code>bumped_on</code>(date&amp;time, starts same as created_on), <code>reported</code>(boolean), <code>delete_password</code>, &amp; <code>replies</code>(array).</li>
-        <li>I can <b>POST</b> a reply to a thead on a specific board by passing form data <code>text</code>, <code>delete_password</code>, &amp; <code>thread_id</code> to <i>/api/replies/{board}</i> and it will also update the bumped_on date to the comments date.(Recomend res.redirect to thread page /b/{board}/{thread_id})
-        In the thread's 'replies' array will be saved <code>_id</code>, <code>text</code>, <code>created_on</code>, <code>delete_password</code>, &amp; <code>reported</code>.</li>
-        <li>I can <b>GET</b> an array of the most recent 10 bumped threads on the board with only the most recent 3 replies from <i>/api/threads/{board}</i>. The <code>reported</code> and <code>delete_passwords</code> fields will not be sent.</li>
-        <li>I can <b>GET</b> an entire thread with all it's replies from <i>/api/replies/{board}?thread_id={thread_id}</i>. Also hiding the same fields.</li>
-        <li>I can delete a thread completely if I send a <b>DELETE</b> request to <i>/api/threads/{board}</i> and pass along the <code>thread_id</code> &amp; <code>delete_password</code>. (Text response will be 'incorrect password' or 'success')</li>
-        <li>I can delete a post(just changing the text to '[deleted]') if I send a <b>DELETE</b> request to <i>/api/replies/{board}</i> and pass along the <code>thread_id</code>, <code>reply_id</code>, &amp; <code>delete_password</code>. (Text response will be 'incorrect password' or 'success')</li>
-        <li>I can report a thread and change it's reported value to true by sending a <b>PUT</b> request to <i>/api/threads/{board}</i> and pass along the <code>thread_id</code>. (Text response will be 'success')</li>
-        <li>I can report a reply and change it's reported value to true by sending a <b>PUT</b> request to <i>/api/replies/{board}</i> and pass along the <code>thread_id</code> &amp; <code>reply_id</code>. (Text response will be 'success')</li>
-        <li>Complete functional tests that wholely test routes and pass.</li>
-      </ol>
-      <img src='https://cdn.gomix.com/8f5547a1-a0d6-48f6-aa38-51753a0105f4%2FScreen%20Shot%202017-01-02%20at%201.04.10%20AM.png'>
-      <br><br>
-      <h2><a href='/b/general/'>Go to testing <i>'/b/general/'</i> board</a></h2>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>ADPs API</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	 crossorigin="anonymous">
+	<!-- 
+  fancy box
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" /> -->
+
+
+
+	<!-- jquery slim -->
+	<!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+     -->
+</head>
+
+<body>
+
+	<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">
+				<img src="https://dl.dropbox.com/s/ef6bd77m47iz2w6/mw100.png?dl=0" width="50px" />
+       <h3 style="display:inline; padding-left:3%; " > Anonymous Discussion Platform API By Ahmad Ali </h3>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="nav navbar-nav">
+           
+             
+            <!-- <li class="nav-item active">
+              <a class="nav-link" href="#userstories"> About
+                <span class="sr-only">(current)</span>
+              </a>
+            </li> -->
+        
+        </ul>
+         <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#about"> About
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+           <li class="nav-item active">
+            <a class="nav-link" href="http://ahmad-ali.co.uk/" target="_blank" > My Portfolio
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          </ul>
+
+       
+      </div>
     </div>
-    <hr style='margin: 50px'>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+     
+
+         <hr style='margin: 50px'>
+
+
+  <!-- Page Content -->
+
+
+
+      <div class="container">
+          <h3> Instructions: </h3>
+       <h4> <code> Create A topic, create a discussions on different topics, add replies to discussions </code </h4>
+
+            <hr style='margin: 50px'>
+
+        <h3> Get All Topics </h3>
+        <p> <code> Response is a JSON object contains All collections in The DB, each collection corresponds to a Topic </code> </p>
+        <a href="/api/all_boards"><button class="btn btn-primary"> All Topics </button> </a>
+
+            <hr style='margin: 50px'>
+
+             <h3> Go To a Topic </h3>
+             <p> <code> use a Topic Name to get Redirected to that toopic page, Example: <i>rt </i> </code> </p>
+              <form action="/get_topic" method="post" >
+          <input type='text' placeholder='topic' id='board2' name='topicName' required=''><br>
+         
+          <input class="btn btn-primary"  type="submit" value="Go to Topic" style=" margin-top: 10px;" >
+        </form>
+      
+
+            <hr style='margin: 50px'>
+
     <div id='testui' style='margin-left: 5%'>
-      <h2 style="text-align: left">API Tests:</h2>
-        <h4>New thread (POST /api/threads/:board)</h4>
+        <h3> Create New Topic or Create a new discussion on an existing Topic</h3>
+        <p><code> use an existing topic Name to add discussions to it, or type a new Topic Name to create it </code></p>
+        <p><code> You will be redirected to the topic page weather it is a new or existing one </code> </p>
         <form action="/api/threads/test" method="post" id="newThread">
-          <input type='text' placeholder='board' id='board1' name='board' required=''><br>
-          <textarea type='text' placeholder='Thread text...' name='text' required=''></textarea><br>
-          <input type='text' placeholder='password to delete' name='delete_password' required=''><br>
-          <input type="submit" value="Submit">
+          <input class="form-control" type='text' placeholder='topic Name' id='board1' name='board' required=''><br>
+          <textarea class="form-control"  type='text' placeholder='add discussion text ' name='text' required=''></textarea><br>
+          <input class="form-control" type='text' placeholder='password to delete' name='delete_password' required=''><br>
+          <input class="btn btn-primary" type="submit" value="Create">
         </form>
-        <hr>
-        <h4>Report thread (PUT /api/threads/:board)</h4>
+
+         <hr style='margin: 50px'>
+
+
+        <h3>Report Discussion </h3>
+        <p><code> use discussion Id to report a discussion, or use report button on its page </code></p>
+        <p><code>reported discussions  will be hidden </code> </p>
         <form id="reportThread">
-          <input type='text' placeholder='board' id='board2' name='board' required=''><br>
+          <input type='text' placeholder='topic' id='board2' name='board' required=''><br>
           <input type='text' placeholder='id to report' name='thread_id' required=''><br>
-          <input type="submit" value="Submit">
+          <input class="btn btn-primary" type="submit" value="report discussion" style="margin-top:10px;">
         </form>
-        <hr>
-        <h4>Delete thread (DELETE /api/threads/:board)</h4>
-        <form id="deleteThread">
+        
+
+
+         <hr style='margin: 50px'>
+
+
+<h3>Delete Discussion </h3>
+        <p><code> use discussion Id to delete it </code></p>
+        <p><code>reported discussions  will be removed </code> </p>        <form id="deleteThread">
           <input type='text' placeholder='board' id='board3' name='board' required=''><br>
           <input type='text' placeholder='id to delete' name='thread_id' required=''><br>
           <input type='text' placeholder='password' name='delete_password' required=''><br>
-          <input type="submit" value="Submit">
-        </form>
-        <hr>
+<input class="btn btn-primary" type="submit" value="Delete discussion" style="margin-top:10px;">        </form>
+        
+
+                 <hr style='margin: 50px'>
+
         
         
-        <h4>New reply (POST /api/replies/:board)</h4>
+        <h3> Add New reply to A discussion</h3>
+        <p><code> use topic name and discussion id to add reply to it, or use form on the topic page </code> </p>
         <form action="/api/threads/test" method="post" id="newReply">
-          <input type='text' placeholder='board' id='board4' name='board' required=''><br>
-          <input type='text' placeholder='thread id' name='thread_id' required=''><br>
-          <textarea type='text' placeholder='Thread text...' name='text' required=''></textarea><br>
-          <input type='text' placeholder='password to delete' name='delete_password' required=''><br>
-          <input type="submit" value="Submit">
-        </form>
-        <hr>
-        <h4>Report reply (PUT /api/replies/:board)</h4>
-        <form id="reportReply">
+          <input class="form-control" type='text' placeholder='topic' id='board4' name='board' required=''><br>
+          <input  class="form-control" type='text' placeholder='discussion id' name='thread_id' required=''><br>
+          <textarea class="form-control" type='text' placeholder='Reply text...' name='text' required=''></textarea><br>
+          <input class="form-control" type='text' placeholder='password to delete' name='delete_password' required=''><br>
+<input class="btn btn-primary" type="submit" value="Add Reply" style="margin-top:10px;"> 
+       </form>
+        
+
+
+                 <hr style='margin: 50px'>
+
+
+
+
+
+        <h3>Report a reply </h3>
+        <p><code> use topic name, discussion id anf reply id to report a reply, or use the button on the discussion page. </code> </p> 
+                <p><code> reported reply will be hidden </code></p>
+
+                <form id="reportReply">
           <input type='text' placeholder='board' id='board5' name='board' required=''><br>
           <input type='text' placeholder='thread id' name='thread_id' required=''><br>
           <input type='text' placeholder='id to report' name='reply_id' required=''><br>
-          <input type="submit" value="Submit">
+<input class="btn btn-primary" type="submit" value="Report Reply" style="margin-top:10px;"> 
         </form>
-        <hr>
-        <h4>Delete reply (DELETE /api/replies/:board)</h4>
+
+
+
+         <hr style='margin: 50px'>
+
+
+
+        <h4>Delete a reply </h4>
+        <p><code> use topic name, discussion id anf reply id to delete a reply.</code> </p>
+        <p><code> deleted reply will be removed </code></p>
         <form id="deleteReply">
           <input type='text' placeholder='board' id='board6' name='board' required=''><br>
           <input type='text' placeholder='thread id' name='thread_id' required=''><br>
           <input type='text' placeholder='id to delete' name='reply_id' required=''><br>
           <input type='text' placeholder='password' name='delete_password' required=''><br>
-          <input type="submit" value="Submit">
-        </form>        
+<input class="btn btn-primary" type="submit" value="Report Reply" style="margin-top:10px;">   
+      </form>        
     </div>
-    <hr style='margin: 50px; margin-top: 200px'>
+    <hr style='margin: 50px;'>
+
+
+
+
     <!-- Your web-app is https, so your scripts need to be too -->
     <script src="https://code.jquery.com/jquery-2.2.1.min.js"
             integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
@@ -160,5 +258,51 @@
         });
       });
    </script>
-  </body>
+
+    <div id='userstories' style='margin-left: 5%; margin-top: 5%'>
+      <h3> In this project: </h3>
+      <ol>
+        <li>Only this site is allowed to load iFrames from its own pages.</li>
+        <li> DNS prefetching si not allowed.</li>
+       
+        <li><b>POST</b> a discussion to a specific topic by passing form data <code>text</code> and <code>delete_password</code> and <code>_id</code>, <code>text</code>, <code>created_on</code>(date&amp;time), <code>bumped_on</code>(date&amp;time, starts same as created_on), <code>reported</code>(boolean), <code>delete_password</code>, &amp; <code>replies</code>(array).</li>
+
+        <li><b>POST</b> a reply to a discussion on a specific topic by passing form data <code>text</code>, <code>delete_password</code>, &amp; <code>thread_id</code>  and it will also update the bumped_on date to the reply date.
+        In the discussion's 'replies' array will be saved <code>_id</code>, <code>text</code>, <code>created_on</code>, <code>delete_password</code>, &amp; <code>reported</code>.</li>
+
+        <li><b>GET</b> an array of the most recent 10 bumped discussions on the topic with only the most recent 3 replies from . The <code>reported</code> and <code>delete_passwords</code> fields will not be sent.</li>
+
+        <li><b>GET</b> an entire discussion with all it's replies from. Also hiding the same fields.</li>
+
+        <li>delete a discussion completely if I send a <b>DELETE</b> request and pass along the <code>discussion id </code> &amp; <code>delete_password</code>. (Text response will be 'incorrect password' or 'success')</li>
+
+        <li>delete a reply(just changing the text to '[deleted]') by sending a <b>DELETE</b> request  and pass along the <code>discussion id</code>, <code>reply_id</code>, &amp; <code>delete_password</code>. (Text response will be 'incorrect password' or 'success')</li>
+
+        <li>report a discussion and change it's reported value to true by sending a <b>PUT</b> request and pass along the <code>discussion id</code>. (Text response will be 'success')</li>
+
+        <li>report a reply and change it's reported value to true by sending a <b>PUT</b> request  and pass along the <code>discussion id</code> &amp; <code>reply_id</code>. (Text response will be 'success')</li>
+
+  
+      </ol>
+      
+    </div>
+
+       
+ 
+
+<!-- footer  -->
+<br /> <br /> <br />
+<hr />
+<p class="text-center"> &COPY; Ahmad Ali </p>
+
+<!-- Bootstrap core JavaScript -->
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<!-- fancy box js -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+</body>
+
 </html>

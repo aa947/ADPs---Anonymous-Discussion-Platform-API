@@ -6,8 +6,6 @@ var expect      = require('chai').expect;
 var cors        = require('cors');
 
 var apiRoutes         = require('./routes/api.js');
-var fccTestingRoutes  = require('./routes/fcctesting.js');
-var runner            = require('./test-runner');
 
 const helmet = require('helmet')
 
@@ -16,7 +14,7 @@ var app = express();
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
-app.use(cors({origin: '*'})); //For FCC testing purposes only
+app.use(cors({origin: '*'})); 
 
 //security:
 app.use(helmet.frameguard({ action: 'sameorigin' }))
@@ -26,6 +24,11 @@ app.use(helmet.referrerPolicy({ policy: 'same-origin' }))
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.route('/get_topic').post((req, res )=>{
+let topic = req.body.topicName;
+res.redirect('/b/'+topic +'/');
+});
 
 //Sample front-end
 app.route('/b/:board/')
@@ -37,14 +40,15 @@ app.route('/b/:board/:threadid')
     res.sendFile(process.cwd() + '/views/thread.html');
   });
 
+
+
 //Index page (static HTML)
 app.route('/')
   .get(function (req, res) {
     res.sendFile(process.cwd() + '/views/index.html');
   });
 
-//For FCC testing purposes
-fccTestingRoutes(app);
+
 
 //Routing for API 
 apiRoutes(app);
@@ -76,4 +80,3 @@ app.listen(process.env.PORT || 3000, function () {
   }
 });
 
-module.exports = app; //for testing
