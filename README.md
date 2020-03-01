@@ -1,6 +1,6 @@
 [![Run on Repl.it](https://repl.it/badge/github/aa947/boilerplate-project-messageboard)](https://repl.it/github/aa947/boilerplate-project-messageboard)
 
-**FreeCodeCamp**- Information Security and Quality Assurance
+## ADPs - Anonymous Discussion Platform API
 ------
 
 Project Anon Message Board
