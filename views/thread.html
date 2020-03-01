@@ -1,23 +1,90 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Welcome to HyperDev!</title>
-    <meta name="description" content="A cool thing made with HyperDev">
-    <link id="favicon" rel="icon" href="https://hyperdev.com/favicon-app.ico" type="image/x-icon">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/public/style.css">
-  </head>
-  <body>
-    <header>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>ADPs API</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	 crossorigin="anonymous">
+	<!-- 
+  fancy box
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" /> -->
+
+
+
+	<!-- jquery slim -->
+	<!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+     -->
+
+              <link rel="stylesheet" href="/public/style.css">
+
+</head>
+
+<body>
+
+	<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">
+				<img src="https://dl.dropbox.com/s/ef6bd77m47iz2w6/mw100.png?dl=0" width="50px" />
+       <h3 style="display:inline; padding-left:3%; " > Anonymous Discussion Platform API By Ahmad Ali </h3>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="nav navbar-nav">
+           
+             
+            <!-- <li class="nav-item active">
+              <a class="nav-link" href="#userstories"> About
+                <span class="sr-only">(current)</span>
+              </a>
+            </li> -->
+        
+        </ul>
+         <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#about"> About
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+           <li class="nav-item active">
+            <a class="nav-link" href="http://ahmad-ali.co.uk/" target="_blank" > My Portfolio
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          </ul>
+
+       
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+     
+
+         <hr style='margin: 50px'>
+
+
+  <!-- Page Content -->
+
+
+
+      <div class="container">
       <h1 id='threadTitle'></h1>
     </header>
     <br>
     
     <div id='boardDisplay'></div>
     
-    <hr style='margin: 50px; margin-top: 200px'>
     <!-- Your web-app is https, so your scripts need to be too -->
     <script src="https://code.jquery.com/jquery-2.2.1.min.js"
             integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
@@ -28,7 +95,7 @@
         currentURL = currentURL.split('/');
         
         var url = "/api/replies/"+currentURL[0];
-        $('#threadTitle').text(window.location.pathname);
+        $('#threadTitle').text('Discussion:  '+window.location.pathname.slice(3));
         $.ajax({
           type: "GET",
           url: url,
@@ -42,26 +109,38 @@
             //
               console.log(ele);//can I use typeScript please?!
               var thread = ['<div class="thread">'];
-              thread.push('<div class="main">')
-              thread.push('<p class="id">id: '+ele._id+' ('+ele.created_on+')</p>');
-              thread.push('<form id="reportThread"><input type="hidden" name="report_id" value="'+ele._id+'"><input type="submit" value="Report"></form>');
-              thread.push('<form id="deleteThread"><input type="hidden" value="'+ele._id+'" name="thread_id" required=""><input type="text" placeholder="password" name="delete_password" required=""><input type="submit" value="Delete"></form>');
-              thread.push('<h3>'+ele.text+'</h3>');
+
+             thread.push('<div class="main">')
+              thread.push('<p class="id">Discussion id: '+ele._id+' ('+ele.created_on+')</p>');
+              thread.push('<form style="display:inline; margin:10px;" id="reportThread"><input type="hidden" name="report_id" value="'+ele._id+'"><input type="submit" value="Report Discussion"></form>');
+              thread.push('<form style="display:inline"  id="deleteThread"><input type="hidden" value="'+ele._id+'" name="thread_id" required=""><input type="text" placeholder="password" name="delete_password" required=""><input type="submit" value="Delete Discussion"></form>');
+              thread.push('<div class="text">')
+              thread.push('<p style="color:red" align="center" class="id"> Discussion text</p> ')
+              thread.push('<h1 >'+ele.text+'</h1>');
+              thread.push('</div>')
               thread.push('</div><div class="replies">');
+
+
+
               ele.replies.forEach(function(rep) {
                 thread.push('<div class="reply">')
                 thread.push('<p class="id">id: '+rep._id+' ('+rep.created_on+')</p>');
-                thread.push('<form id="reportReply"><input type="hidden" name="thread_id" value="'+ele._id+'"><input type="hidden" name="reply_id" value="'+rep._id+'"><input type="submit" value="Report"></form>');
-                thread.push('<form id="deleteReply"><input type="hidden" value="'+ele._id+'" name="thread_id" required=""><input type="hidden" value="'+rep._id+'" name="reply_id" required=""><input type="text" placeholder="password" name="delete_password" required=""><input type="submit" value="Delete"></form>');
-                thread.push('<p>'+rep.text+'</p>');
+                thread.push('<form style="display:inline; margin:10px;" id="reportReply"><input type="hidden" name="thread_id" value="'+ele._id+'"><input type="hidden" name="reply_id" value="'+rep._id+'"><input type="submit" value="Report Reply"></form>');
+                thread.push('<form style="display:inline; margin:10px;" id="deleteReply"><input type="hidden" value="'+ele._id+'" name="thread_id" required=""><input type="hidden" value="'+rep._id+'" name="reply_id" required=""><input type="text" placeholder="password" name="delete_password" required=""><input type="submit" value="Delete Reply"></form>');
+                thread.push('<div class="text_rep">')
+              thread.push('<p style="color:red" align="center" class="id"> Reply text</p> ')
+                thread.push('<h2>'+rep.text+'</h2>');
+                thread.push('</div>')
                 thread.push('</div>')
               });
               thread.push('<div class="newReply">')
               thread.push('<form action="/api/replies/'+currentURL[0]+'/" method="post" id="newReply">');
               thread.push('<input type="hidden" name="thread_id" value="'+ele._id+'">');
               thread.push('<textarea rows="5" cols="80" type="text" placeholder="Quick reply..." name="text" required=""></textarea><br>');
-              thread.push('<input type="text" placeholder="password to delete" name="delete_password" required=""><input style="margin-left: 5px" type="submit" value="Submit">')
+              thread.push('<input type="text" placeholder="password to delete" name="delete_password" required=""><input style="margin-left: 5px" type="submit" value="Add reply">')
               thread.push('</form></div></div></div>')
+
+              
               boardThreads.push(thread.join(''));
             $('#boardDisplay').html(boardThreads.join(''));
           }
@@ -114,5 +193,31 @@
         });              
       });
    </script>
-  </body>
+  
+  
+
+
+
+
+
+
+
+
+   
+
+<!-- footer  -->
+<br /> <br /> <br />
+<hr />
+<p class="text-center"> &COPY; Ahmad Ali </p>
+
+<!-- Bootstrap core JavaScript -->
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<!-- fancy box js -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+</body>
+
 </html>
